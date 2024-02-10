@@ -43,14 +43,97 @@ def greedy_with_help(s1, s2):  # O(n+m) + O(min(n,m))
                 j += 1
     return string
 
-#
+
+#full extensive search
+def plus1(arr):
+    i = len(arr) - 1
+    while i >= 0 and arr[i] == 1:
+        arr[i] = 0
+        i -= 1
+    if i >= 0: arr[i] = 1
+
+
+def all_combinations(string):
+    n = len(string)
+    count = 2**n - 1
+    list = [i for i in range(count)]
+    bin = [0 for i in range(n)]
+    for i in range(count):
+        plus1(bin)
+        t = ""
+        for j in range(n):
+            if bin[j] == 1: t += str(string[j])
+        list[i] = t
+    return list
+
+def exhaustive_search(x, y):
+    n = len(x)
+    m = len(y)
+    ans = ""
+    max_len = 0
+    short = x
+    long = y
+    if n>m:
+        short = y
+        long = x
+    arr_short = all_combinations(short)
+    arr_long = all_combinations(long)
+    for i in range(len(arr_short)):
+        # print(arr_short[i])
+        length = len(arr_short[i])
+        for j in range(len(arr_long)):
+            if arr_short[i] == arr_long[j] and length > max_len:
+                max_len = length
+                ans = arr_short[i]
+    return ans
+
+
+#LCS - optimal
+def lcs_matrix(x,y):
+    n = len(x)
+    m = len(y)
+    c = [[0 for j in range(m+1)] for i in range(n+1)]
+    # c[n-1][m-1] = 4
+    # print(c)
+    for i in range(1,n+1):
+        for j in range(1,m+1):
+            if x[i-1] == y[j-1]:
+                c[i][j] = c[i - 1][j - 1] + 1
+            else:
+                c[i][j] = max(c[i - 1][j], c[i][j - 1])
+    print(c)
+    return c
+
+def lcs(x,y):
+    mat = lcs_matrix(x,y)
+    row = len(mat)
+    col = len(mat[0])
+    i = row - 1
+    j = col - 1
+    seqlength = mat[i][j]
+    count = seqlength - 1
+    res = ""
+    while count >= 0:
+        if x[i-1] == y[j-1]:
+            res = x[i-1] + res
+            i -= 1
+            j -= 1
+            count -= 1
+        elif mat[i][j] == mat[i-1][j]:
+            i -= 1
+        else:
+            j -= 1
+    return res
+
 
 
 def main():
     print(greedy_insufficient("bdcaba", "abcbdab"))
     print(greedy_insufficient("abcbdab", "bdcaba"))
     print(greedy_with_help("bdcaba", "abcbdab"))
-    # print(greedy_with_help("abcbdab", "bdcaba"))
+    print(greedy_with_help("abcbdab", "bdcaba"))
+    print(lcs('abc','adcb'))
+    print(lcs('abc', 'bdcb'))
 
 
 if __name__ == '__main__':
