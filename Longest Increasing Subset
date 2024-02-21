@@ -1,0 +1,118 @@
+# from SpeechToText import lcs
+
+
+def greedy(arr):
+    ans = []
+    ans.append(arr[0])
+    j = 0
+    for i in range(1,len(arr)):
+        if ans[j] < arr[i]:
+            ans.append(arr[i])
+            j += 1
+    return ans
+
+
+def plus1(arr):
+    i = len(arr) - 1
+    while i >= 0 and arr[i] == 1:
+        arr[i] = 0
+        i -= 1
+    if i >= 0: arr[i] = 1
+
+def allcombos(arr):
+    n = len(arr)
+    count = 2**n - 1
+    list = []
+    bin = [0 for i in range(n)]
+    for i in range(count):
+        plus1(bin)
+        temp = []
+        for j in range(n):
+            if bin[j] == 1:
+                temp.append(arr[j])
+        list.append(temp)
+    return list
+
+def exhaustive(arr):
+    list = allcombos(arr)
+    max_length = 0
+    ans = []
+    for i in range(len(list)):
+        length = len(list[i])
+        if list[i] == sorted(list[i]) and length > max_length:
+            max_length = length
+            ans = list[i]
+    return ans
+
+
+# def LIS_with_LCS(arr):
+#     return lcs(arr,sorted(arr))
+
+
+def BinarySearchInArray(arr, end, value):
+    low = 0
+    high = end
+    if value < arr[0]: return 0
+    if value > arr[end]: return end + 1
+    while low < high:
+        mid = (low + high) // 2
+        if value < arr[mid]: high = mid
+        else: low = mid + 1
+    return low
+
+
+def LIS_length(arr):
+    temp = [0 for i in range(len(arr))]
+    temp[0] = arr[0]
+    lis = 0
+    for v in arr:
+        index = BinarySearchInArray(temp, lis, v)
+        temp[index] = v
+        if index > lis: lis += 1
+    return lis + 1
+
+
+def BinarySearchInMatrix(mat, end, value):
+    low = 0
+    high = end
+    if value < mat[0][0]: return 0
+    if value > mat[end][end]: return end + 1
+    while low < high:
+        mid = (low + high) // 2
+        if value < mat[mid][mid]:
+            high = mid
+        else:
+            low = mid + 1
+    return low
+
+def LIS(arr):
+    n = len(arr)
+    mat = [[0 for i in range(n)] for i in range(n)]
+    mat[0][0] = arr[0]
+    lis = 0
+    for i in range(1,n):
+        index = BinarySearchInMatrix(mat, lis, arr[i])
+        for j in range(index):
+            mat[index][j] = mat[index-1][j]
+        mat[index][index] = arr[i]
+        if index > lis: lis += 1
+    ans = []
+    for i in range(lis + 1):
+        ans.append(mat[lis][i])
+    return ans
+
+
+
+
+def main():
+    arr = [0, 30, 8, 4, 10, 2, 12]
+    arr2 = [0, 30, 8, 4, 10, 2, 12, 6, 14, 1, 2, 3, 4, 5, 6, 7, 15] # ans = [0, 1, 2, 3, 4, 5, 6, 7, 15]
+    print(greedy(arr))
+    print(exhaustive(arr2))
+    arr3= [8, 2, 9, 3, 1, 10, 4, 6, 5, 7]
+    print(LIS_length(arr3))
+    print(LIS(arr3))
+
+
+if __name__ == '__main__':
+    main()
