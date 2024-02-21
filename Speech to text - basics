@@ -1,5 +1,5 @@
-Within the complex algorithem of translating speech to text, here will focus on identifing the closest word that was intended by compraing to a giving dictionary.
-more precisly we will be exmining the most optimal way of that sort of identification.
+Within the complex algorithem of translating speech to text, this sagment will focus on identifing the closest word that was intended by comparison to a giving dictionary.
+more precisly we will be exmining the most optimal way to identify similarities between two strings.
 
 # comparing two strings letter by letter, something in the likes of mergeSort() 
 def greedy_insufficient(s1, s2):  # O(n*m)
