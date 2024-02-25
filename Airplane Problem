@@ -1,0 +1,114 @@
+class Node:
+    def __init__(self, val_x, val_y):
+        self.val_x = val_x
+        self.val_y = val_y
+        self.price = 0
+        self.num_of_paths = 0
+
+
+def greedy(mat):
+    cost = 0
+    y = len(mat)
+    x = len(mat[0])
+    row = 0
+    col = 0
+    while True:
+        if row == y - 1 and col == x - 1:
+            return cost
+        else:
+            if mat[row][col].val_x < mat[row][col].val_y or row == y - 1:
+                cost += mat[row][col].val_x
+                col += 1
+            elif mat[row][col].val_x >= mat[row][col].val_y or col == x - 1:
+                cost += mat[row][col].val_y
+                row += 1
+
+
+def plus1(arr):
+    n = len(arr) - 1
+    while n >= 0 and arr[n] == 1:
+        arr[n] = 0
+        n -= 1
+    if n >= 0: arr[n] = 1
+
+
+def exhaustive(mat):
+    n = len(mat) - 1
+    m = len(mat[0]) - 1
+    bin = [0] * (n + m)
+    list = []
+    for i in range(2 ** (n + m)):
+        cost = 0
+        row = 0
+        col = 0
+        for move in bin:
+            if row <= n and col <= m:
+                if move == 0:
+                    cost += mat[row][col].val_x
+                    col += 1
+                else:
+                    cost += mat[row][col].val_y
+                    row += 1
+        plus1(bin)
+        if row == n and col == m:
+            list.append(cost)
+    return min(list)
+
+
+def min_cost(mat):
+    n = len(mat)
+    m = len(mat[0])
+
+    # first row and col - filling cost as is
+    for i in range(1, n):
+        mat[i][0].price = mat[i - 1][0].price + mat[i - 1][0].val_y
+    for j in range(1, m):
+        mat[0][j].price = mat[0][j - 1].price + mat[0][j - 1].val_x
+
+    # rest of the matrix - each node.price is determined by the lowest cost
+    for i in range(1, n):
+        for j in range(1, m):
+            mat[i][j].price = min(mat[i][j - 1].price + mat[i][j - 1].val_x,
+                                  mat[i - 1][j].price + mat[i - 1][j].val_y)
+
+    route = min_cost_route(mat)
+
+    return mat[-1][-1].price, route
+
+
+def min_cost_route(mat):
+    row = len(mat) - 1
+    col = len(mat[0]) - 1
+    list = []
+    while row >= 0 and col >= 0:
+        list.insert(0, (mat[row][col].val_x, mat[row][col].val_y))
+        # list.insert(0,mat[row][col].price)
+        opt1 = mat[row - 1][col].price
+        opt2 = mat[row][col - 1].price
+        if mat[row][col - 1].price + mat[row][col - 1].val_x < mat[row - 1][col].price + mat[row - 1][col].val_y:
+            col -= 1
+        else:
+            row -= 1
+    return list
+
+
+
+def main():
+    mat_of_costs = [
+        [Node(3, 1), Node(5, 2), Node(10, 4), Node(4, 2), Node(0, 4)],
+        [Node(3, 8), Node(11, 5), Node(1, 3), Node(5, 3), Node(0, 2)],
+        [Node(8, 3), Node(6, 3), Node(4, 1), Node(6, 5), Node(0, 4)],
+        [Node(4, 0), Node(54, 0), Node(5, 0), Node(3, 0), Node(0, 0)]
+    ]
+    mat_of_costs2 = [
+        [Node(3, 1), Node(5, 2), Node(10, 4)],
+        [Node(3, 8), Node(11, 5), Node(1, 3)],
+        [Node(8, 3), Node(6, 3), Node(4, 1)],
+    ]
+    print(greedy(mat_of_costs))
+    print(exhaustive(mat_of_costs))
+    print(min_cost(mat_of_costs))
+
+
+if __name__ == '__main__':
+    main()
