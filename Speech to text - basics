@@ -1,7 +1,4 @@
-Within the complex algorithem of translating speech to text, this sagment will focus on identifing the closest word that was intended by comparison to a giving dictionary.
-more precisly we will be exmining the most optimal way to identify similarities between two strings.
-
-# comparing two strings letter by letter, something in the likes of mergeSort() 
+# comparing two given strings (dictinary word and word input) letter by letter.
 def greedy_insufficient(s1, s2):  # O(n*m)
     string = ""
     last_j = 0
