@@ -69,13 +69,15 @@ def Optimal_Testing_extended(last_floor, break_point_passed):
     floors.insert(0,100)
     # Initialize break point
     break_point = break_point_passed
-    else:
-        for i in range(len(floors)):
-            if floors[i] <= break_point:
-                potn_range[0] = floors[i]
-                potn_range[1] = floors[i-1]
-                break
-            count += 1
+    temp = 0
+    for i in range(len(floors)):
+        tmep = i
+        if floors[i] <= break_point:
+            potn_range[0] = floors[i]
+            potn_range[1] = floors[i-1]
+            break
+        count += 1
+
     for test in range(potn_range[0],potn_range[1] + 1):
         if test == break_point:
             return test, "count is: " + str(count)
