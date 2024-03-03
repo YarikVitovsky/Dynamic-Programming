@@ -66,7 +66,7 @@ def Optimal_Testing_extended(last_floor, break_point_passed):
         floors.insert(0,k)
         p += 1
         k += p
-    floors.insert(0,100)
+    floors.insert(0,n)
     # Initialize break point
     break_point = break_point_passed
     temp = 0
