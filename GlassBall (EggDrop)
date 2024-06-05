@@ -1,0 +1,57 @@
+import math
+import random
+
+
+def checking_number(n, k):
+    """improved version, O(n*k)"""
+    dp = [[0] * (k + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for j in range(1, k + 1):
+            dp[i][j] = 1 + dp[i - 1][j - 1] + dp[i - 1][j]
+
+        if dp[i][k] >= n:
+            return i
+
+
+def index_floor(f_i, b):
+    """By dividing the floor unevenly we get time complexity of sqrt(2*n) tries \\ O(sqrt(n))"""
+    low = 0
+    high = 0
+    '''finding k for uneven division'''
+    k = int(math.sqrt(2 * (len(f_i) - 1)))
+    '''starting drop test. note:b and floor value are real numbers '''
+    index = 0
+    while k > 0:
+        low = index
+        k -= 1
+        index += k
+        high = index
+        if b <= f_i[high]:
+            break
+    '''move over to remaining floors if necessary'''
+    if b > f_i[high]:
+        low = high
+        high = len(f_i) - 1
+    '''search exact floor, floors are of index 1 to n'''
+    for i in range(low, high + 1):
+        if b <= f_i[i]:
+            return i
+    '''incase glass ball doesn't break return -1'''
+    return -1
+
+
+def index_first_floor(n):
+    """for uneven division of floors k>k-1>...>1 consider n = (k(k+1)/2
+    therefor 2n = k(k+1) which approximately results in k ~ sqrt(2*n).
+    index of the first door is k as a form of a natural number.
+    """
+    return int(math.sqrt(2 * n))
+
+
+if __name__ == "__main__":
+    x = random.randint(1, 100)
+    y = random.randint(1, 100)
+    print(checking_number(9, 5))
+    # arr = [x + 0.123 for x in range(100)]
+    arr = [x/10 for x in range(1,11)]
+    print(index_floor(arr,0.77))
