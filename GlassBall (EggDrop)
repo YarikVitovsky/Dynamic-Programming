@@ -3,7 +3,8 @@ import random
 
 
 def checking_number(n, k):
-    """improved version, O(n*k)"""
+    """improved version of time complexity of O(n*k), 
+        By the approach of -How many (n)floors can we cover with k eggs and m moves-"""
     dp = [[0] * (k + 1) for _ in range(n + 1)]
     for i in range(1, n + 1):
         for j in range(1, k + 1):
